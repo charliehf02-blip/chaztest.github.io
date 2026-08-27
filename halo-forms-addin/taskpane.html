@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Halo Request Forms</title>
+<script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #5b6470;
+    --line: #dfe3e8;
+    --accent: #00355c;
+    --accent-soft: #e7eef4;
+    --bg: #f7f8fa;
+    --danger: #b3261e;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+  }
+  #app { padding: 16px; padding-bottom: 90px; }
+
+  .header {
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+    color: var(--accent);
+  }
+  .header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .type-switch {
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .type-switch button {
+    flex: 1;
+    padding: 9px 6px;
+    border: none;
+    background: #fff;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border-right: 1px solid var(--line);
+  }
+  .type-switch button:last-child { border-right: none; }
+  .type-switch button.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 18px 0;
+  }
+  .field {
+    margin-bottom: 12px;
+  }
+  .field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--ink);
+    font-size: 12.5px;
+  }
+  .field .hint {
+    display: block;
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+  input[type="text"], select, textarea {
+    width: 100%;
+    padding: 7px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--ink);
+    background: #fff;
+  }
+  input[type="text"]:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  .required-mark { color: var(--danger); margin-left: 2px; }
+
+  .section-label {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 10.5px;
+    color: var(--muted);
+    font-weight: 700;
+    margin: 4px 0 10px 0;
+  }
+
+  .actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    padding: 12px 16px;
+  }
+  #generateBtn {
+    width: 100%;
+    padding: 10px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #generateBtn:hover { background: #00436f; }
+  #generateBtn:disabled {
+    background: #a9b3bd;
+    cursor: not-allowed;
+  }
+
+  .status {
+    margin-top: 8px;
+    font-size: 12px;
+    text-align: center;
+    min-height: 16px;
+  }
+  .status.success { color: #0f6d3c; }
+  .status.error { color: var(--danger); }
+
+  .banner {
+    background: var(--accent-soft);
+    border: 1px solid #c3d6e5;
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    font-size: 11.5px;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <h1>Halo Request Forms</h1>
+      <p>Fill in the details and insert a formatted request into this email.</p>
+    </div>
+
+    <div class="banner">This email will be routed to Halo ITSM. Keep field values short and specific &mdash; they map directly into the ticket.</div>
+
+    <div class="type-switch">
+      <button type="button" id="btnChange" class="active">Change Request</button>
+      <button type="button" id="btnClosing">File Closing</button>
+    </div>
+
+    <form id="changeForm" class="form-panel">
+      <div class="section-label">Change request details</div>
+
+      <div class="field">
+        <label for="c_urgency">Urgency<span class="required-mark">*</span></label>
+        <select id="c_urgency" required>
+          <option value="">Select&hellip;</option>
+          <option value="Urgent">Urgent</option>
+          <option value="Regular">Regular</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="c_matterName">Matter Name<span class="required-mark">*</span></label>
+        <input type="text" id="c_matterName" required />
+      </div>
+
+      <div class="field">
+        <label for="c_matterNumber">Matter Number<span class="required-mark">*</span></label>
+        <input type="text" id="c_matterNumber" required />
+      </div>
+
+      <div class="field">
+        <label for="c_clientNumber">Client Number<span class="required-mark">*</span></label>
+        <input type="text" id="c_clientNumber" required />
+      </div>
+
+      <div class="field">
+        <label for="c_clientName">Client Name<span class="required-mark">*</span></label>
+        <input type="text" id="c_clientName" required />
+      </div>
+
+      <div class="field">
+        <label for="c_infoType">What type of information needs updating?<span class="required-mark">*</span></label>
+        <select id="c_infoType" required>
+          <option value="">Select&hellip;</option>
+          <option value="Client Name">Client Name</option>
+        </select>
+        <span class="hint">List will expand as more update types are added.</span>
+      </div>
+
+      <div class="field">
+        <label for="c_level">At what level do you want this change made?<span class="required-mark">*</span></label>
+        <select id="c_level" required>
+          <option value="">Select&hellip;</option>
+          <option value="Matter level">Matter level</option>
+          <option value="Client level">Client level</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="c_description">Describe the information you want changed<span class="required-mark">*</span></label>
+        <textarea id="c_description" placeholder="Please provide as much detail as possible." required></textarea>
+      </div>
+
+      <div class="field">
+        <label for="c_ewalled">3E EWalled<span class="required-mark">*</span></label>
+        <select id="c_ewalled" required>
+          <option value="">Select&hellip;</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+    </form>
+
+    <form id="closingForm" class="form-panel" style="display:none;">
+      <div class="section-label">File closing details</div>
+
+      <div class="field">
+        <label for="f_urgency">Urgency<span class="required-mark">*</span></label>
+        <select id="f_urgency" required>
+          <option value="">Select&hellip;</option>
+          <option value="Urgent">Urgent</option>
+          <option value="Regular">Regular</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f_matterName">Matter Name<span class="required-mark">*</span></label>
+        <input type="text" id="f_matterName" required />
+      </div>
+
+      <div class="field">
+        <label for="f_matterNumber">Matter Number<span class="required-mark">*</span></label>
+        <input type="text" id="f_matterNumber" required />
+      </div>
+
+      <div class="field">
+        <label for="f_clientNumber">Client Number<span class="required-mark">*</span></label>
+        <input type="text" id="f_clientNumber" required />
+      </div>
+
+      <div class="field">
+        <label for="f_reason">Closure Reason<span class="required-mark">*</span></label>
+        <select id="f_reason" required>
+          <option value="">Select&hellip;</option>
+          <option value="Matter Completed">Matter Completed</option>
+          <option value="Client Terminated">Client Terminated</option>
+          <option value="Non-Engagement">Non-Engagement</option>
+          <option value="Conflict">Conflict</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f_billing">Final Billing Status<span class="required-mark">*</span></label>
+        <select id="f_billing" required>
+          <option value="">Select&hellip;</option>
+          <option value="Fully Billed">Fully Billed</option>
+          <option value="Outstanding Balance">Outstanding Balance</option>
+          <option value="Write-off Required">Write-off Required</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <div class="actions">
+    <button type="button" id="generateBtn">Insert into email</button>
+    <div id="status" class="status"></div>
+  </div>
+
+<script type="text/javascript" src="taskpane.js"></script>
+</body>
+</html>
