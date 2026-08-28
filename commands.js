@@ -28,3 +28,4 @@ function openHaloPortal(event) {
 
 // Registers the function so the manifest's <FunctionName>openHaloPortal</FunctionName> can find it.
 Office.actions.associate("openHaloPortal", openHaloPortal);
+Office.context.mailbox.item.close();
