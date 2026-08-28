@@ -21,6 +21,7 @@ function openHaloPortal(event) {
       }
     }
   );
+  Office.context.mailbox.item.close();
 
   // Tells Outlook the ribbon action has completed, so the button doesn't spin indefinitely.
   event.completed();
@@ -28,4 +29,3 @@ function openHaloPortal(event) {
 
 // Registers the function so the manifest's <FunctionName>openHaloPortal</FunctionName> can find it.
 Office.actions.associate("openHaloPortal", openHaloPortal);
-Office.context.mailbox.item.close();
