@@ -21,7 +21,7 @@ function openHaloPortal(event) {
       }
     }
   );
-  Office.context.mailbox.item.close();
+  Office.context.mailbox.item.closeAsync();
 
   // Tells Outlook the ribbon action has completed, so the button doesn't spin indefinitely.
   event.completed();
